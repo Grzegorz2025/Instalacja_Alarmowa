@@ -1,0 +1,244 @@
+package main_sys2
+public
+    with SEI;
+
+system SecuritySystem
+end SecuritySystem;
+
+system implementation SecuritySystem.impl
+    subcomponents
+        this_MotionSensor: device MotionSensor;
+        this_MagneticAlarmSensor: device MagneticAlarmSensor;
+        this_Camera: device Camera;
+        this_LaserSensor: device LaserSensor;
+        this_AlarmUnit: device AlarmUnit;
+        this_DoorLockMechanism: device DoorLockMechanism;
+        this_Phone: device Phone;
+        this_Controller: process Controller.impl;
+        this_CallPoliceController: process CallPoliceController;
+        this_MainProcessor: processor MainProcessor.impl;
+        this_EthernetCommunication: bus EthernetCommunication.impl;
+    connections
+        motion_sensor_conn: port this_MotionSensor.motion_detected -> this_Controller.motion_detected_in;
+        magnetic_sensor_conn: port this_MagneticAlarmSensor.alarm_set_on -> this_Controller.magnet_alarm_set_on_in;
+        camera_conn_in: port this_Camera.check_motion -> this_Controller.camera_chceck_detection_in;
+        camera_conn_out: port this_Controller.recording_camera_video_out -> this_Camera.recording_video;
+        camera_conn_video_in: port this_Camera.video_registered -> this_Controller.video_registered_in;
+        laser_sensor_conn: port this_LaserSensor.alarm_set_on -> this_Controller.laser_alarm_set_on_in;
+        alarm_unit_conn: port this_Controller.alarm_on_out -> this_AlarmUnit.alarm_on_off;
+        door_lock_conn: port this_Controller.door_lock_out -> this_DoorLockMechanism.lock_the_doors;
+        phone_conn_out: port this_CallPoliceController.phone_out -> this_Phone.call_police;
+        --CallPoliceController
+        motion_sensor_CallPolice_conn: port this_MotionSensor.motion_detected -> this_CallPoliceController.motion_detected_in;
+        magnetic_sensor_CallPolice_conn: port this_MagneticAlarmSensor.alarm_set_on -> this_CallPoliceController.magnet_alarm_set_on_in;
+        camera_conn_video_CallPolice_in: port this_Camera.video_registered -> this_CallPoliceController.video_registered_in;
+        camera_conn_CallPolice_in: port this_Camera.check_motion -> this_CallPoliceController.camera_chceck_detection_in;
+        laser_sensor_CallPolice_conn: port this_LaserSensor.alarm_set_on -> this_CallPoliceController.laser_alarm_set_on_in;
+
+        --bus connections
+        bus_motion_sensor_conn: bus access this_EthernetCommunication -> this_MotionSensor.bus_access;
+        bus_magnetic_sensor_conn: bus access this_EthernetCommunication -> this_MagneticAlarmSensor.bus_access;
+        bus_camera_conn: bus access this_EthernetCommunication -> this_Camera.bus_access;
+        bus_laser_sensor_conn: bus access this_EthernetCommunication -> this_LaserSensor.bus_access;
+        bus_alarm_unit_conn: bus access this_EthernetCommunication -> this_AlarmUnit.bus_access;
+        bus_door_lock_conn: bus access this_EthernetCommunication -> this_DoorLockMechanism.bus_access;
+        bus_phone_conn: bus access this_EthernetCommunication -> this_Phone.bus_access;
+end SecuritySystem.impl;
+
+process Controller
+    features
+        motion_detected_in: in event port;
+        magnet_alarm_set_on_in: in event port;
+        camera_chceck_detection_in: in event port;
+        recording_camera_video_out: out event port;
+        video_registered_in: in event port;
+        laser_alarm_set_on_in: in event port;
+        alarm_on_out: out event port;
+        door_lock_out: out event port;
+end Controller;
+process implementation Controller.impl
+    subcomponents
+        this_thread_MotionDetected: thread MotionDetected.impl;
+        this_thread_ControlRules: thread ControlRules.impl;
+        this_thread_AlarmON: thread AlarmON.impl;
+        this_thread_CameraOperate: thread CameraOperate.impl;
+end Controller.impl;
+
+process CallPoliceController
+    features
+        phone_out: out event port;
+        motion_detected_in: in event port;
+        magnet_alarm_set_on_in: in event port;
+        camera_chceck_detection_in: in event port;
+        video_registered_in: in event port;
+        laser_alarm_set_on_in: in event port;
+end CallPoliceController;
+process implementation CallPoliceController.impl
+end CallPoliceController.impl;
+
+------------------------------------------------THREAD
+thread MotionDetected
+end MotionDetected;
+thread implementation MotionDetected.impl
+end MotionDetected.impl;
+
+thread ControlRules
+end ControlRules;
+thread implementation ControlRules.impl
+end ControlRules.impl;
+
+thread AlarmON
+end AlarmON;
+thread implementation AlarmON.impl
+end AlarmON.impl;
+
+thread CameraOperate
+end CameraOperate;
+thread implementation CameraOperate.impl
+end CameraOperate.impl;
+
+thread CallPoliceRules
+end CallPoliceRules;
+thread implementation CallPoliceRules.impl
+end CallPoliceRules.impl;
+
+------------------------------------------------PROCESSORS
+processor MainProcessor
+    features
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.05 kg;  -- Waga procesora
+end MainProcessor;
+processor implementation MainProcessor.impl
+    subcomponents
+        this_RAM: memory RAM;
+end MainProcessor.impl;
+
+processor PoliceCallProcessor
+    features
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.05 kg;
+end PoliceCallProcessor;
+processor implementation PoliceCallProcessor.impl
+    subcomponents
+        this_Flash: memory Flash;
+        this_VideoStorage: memory VideoStorage;
+end PoliceCallProcessor.impl;
+
+------------------------------------------------MEMORY
+memory RAM
+    properties
+        SEI::GrossWeight => 0.02 kg;
+        SEI::WeightLimit => 0.05 kg;
+end RAM;
+
+memory Flash
+    properties
+        SEI::GrossWeight => 0.01 kg;
+        SEI::WeightLimit => 0.03 kg;   -- dokonczyc wagi
+      
+end Flash;
+
+memory VideoStorage
+    properties
+        SEI::GrossWeight => 0.2 kg;
+        SEI::WeightLimit => 0.4 kg;
+end VideoStorage;
+
+------------------------------------------------BUS
+bus EthernetCommunication
+end EthernetCommunication;
+bus implementation EthernetCommunication.impl
+end EthernetCommunication.impl;
+
+------------------------------------------------DEVICES
+device MotionSensor
+    features
+        motion_detected: out event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.15 kg;
+        SEI::WeightLimit => 0.20 kg;
+        SEI::PowerCapacity => 0.5 W;
+end MotionSensor;
+device implementation MotionSensor.impl
+end MotionSensor.impl;
+
+device MagneticAlarmSensor
+    features
+        alarm_set_on: out event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.05 kg;
+        SEI::WeightLimit => 0.07 kg;
+        SEI::PowerCapacity => 0.1 W;
+        Latency => 2 ms .. 5 ms;
+end MagneticAlarmSensor;
+device implementation MagneticAlarmSensor.impl
+end MagneticAlarmSensor.impl;
+
+device Camera
+    features
+        check_motion: out event port;
+        recording_video: in event port;
+        video_registered: out event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.4 kg;
+        SEI::WeightLimit => 0.6 kg;
+        SEI::PowerCapacity => 7.0 W;
+        Latency => 5 ms .. 10 ms;
+end Camera;
+device implementation Camera.impl
+end Camera.impl;
+
+device LaserSensor
+    features
+        alarm_set_on: out event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.3 kg;
+        SEI::WeightLimit => 0.5 kg;
+        SEI::PowerCapacity => 2.0 W;
+end LaserSensor;
+device implementation LaserSensor.impl
+end LaserSensor.impl;
+
+device AlarmUnit
+    features
+        alarm_on_off: in event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 1.5 kg;
+        SEI::WeightLimit => 2.0 kg;
+        SEI::PowerCapacity => 20.0 W;
+end AlarmUnit;
+device implementation AlarmUnit.impl
+end AlarmUnit.impl;
+
+device DoorLockMechanism
+    features
+        lock_the_doors: in event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 2.0 kg;
+        SEI::WeightLimit => 2.5 kg;
+        SEI::PowerCapacity => 12.0 W;
+end DoorLockMechanism;
+device implementation DoorLockMechanism.impl
+end DoorLockMechanism.impl;
+
+device Phone
+    features
+        call_police: in event port;
+        bus_access: requires bus access EthernetCommunication;
+    properties
+        SEI::GrossWeight => 0.2 kg;
+        SEI::WeightLimit => 0.5 kg;
+        SEI::PowerCapacity => 3.0 W;
+end Phone;
+device implementation Phone.impl
+end Phone.impl;
+
+end main_sys2;
