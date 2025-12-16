@@ -244,5 +244,4 @@ end Phone;
 device implementation Phone.impl
 end Phone.impl;
 
-
 end main_sys2;
