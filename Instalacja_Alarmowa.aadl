@@ -43,6 +43,9 @@ system implementation SecuritySystem.impl
         bus_alarm_unit_conn: bus access this_EthernetCommunication -> this_AlarmUnit.bus_access;
         bus_door_lock_conn: bus access this_EthernetCommunication -> this_DoorLockMechanism.bus_access;
         bus_phone_conn: bus access this_EthernetCommunication -> this_Phone.bus_access;
+        bus_main_processor_conn: bus access this_EthernetCommunication -> this_MainProcessor.bus_access;
+        bus_police_call_processor_conn: bus access this_EthernetCommunication -> this_PoliceCallProcessor.bus_access;
+
 end SecuritySystem.impl;
 
 process Controller
@@ -240,5 +243,6 @@ device Phone
 end Phone;
 device implementation Phone.impl
 end Phone.impl;
+
 
 end main_sys2;
