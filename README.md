@@ -10,13 +10,13 @@ Model instalacji alarmowej dotyczy systemu alarmowego budynku mieszkalnego z sys
 ### **SPIS KOMPONENTÓW**
 
 ## **URZĄDZENIA:**
-1. czujnik ruchu, umieszczony w korytarzu pomieszczenia
-2. kontaktron, umieszczony we framudze drzwi, w celu wykrycia ich otwarcia
-3. kamera, umieszczona przed budynkiem, obejmując zasięgiem wejście do niego
-4. czujnik laserowy, umieszczony przed budynkiem, wykrywa wtargnięcie na podjazd
-5. jednostka alarmowa, moduł alarmowy wyzwalający ostrzeżenia świetlne i dźwiękowe o wykryciu zdarzenia
-6. mechanizm blokujący drzwi, dodatkowa blokada (oprócz zamka) zamykająca drzwi
-7. moduł telefonu, służący do poinformowania policji o wtargnięciu
+1. "this_MotionSensor" - czujnik ruchu, umieszczony w korytarzu pomieszczenia
+2. "this_MagneticAlarmSensor" - kontaktron, umieszczony we framudze drzwi, w celu wykrycia ich otwarcia
+3. "this_Camera" - kamera, umieszczona przed budynkiem, obejmując zasięgiem wejście do niego
+4. "this_LaserSensor" - czujnik laserowy, umieszczony przed budynkiem, wykrywa wtargnięcie na podjazd
+5. "this_AlarmUnit" - jednostka alarmowa, moduł alarmowy wyzwalający ostrzeżenia świetlne i dźwiękowe o wykryciu zdarzenia
+6. "this_DoorLockMechanism" - mechanizm blokujący drzwi, dodatkowa blokada (oprócz zamka) zamykająca drzwi
+7. "this_Phone" - moduł telefonu, służący do poinformowania policji o wtargnięciu
 
 ## **PROCESORY:**
 
@@ -80,3 +80,9 @@ Model instalacji alarmowej dotyczy systemu alarmowego budynku mieszkalnego z sys
 
 ### **Model projektu**
 <img width="2324" height="961" alt="Instalacja_alarmowa" src="https://github.com/user-attachments/assets/ae9b3001-8f17-4c62-ba62-33a1ae8f277b" />
+
+## **Literatura**
+
+[1] OSATE 2 - Open Source AADL Tool Environment - https://osate.org/ <br>
+[2] AADL Community Resources and Examples - https://github.com/osate <br
+[3] SAE International, "AS5506C: Architecture Analysis & Design Language (AADL)," SAE International Standard, 2017 - https://www.sae.org/standards/content/as5506c/>
